@@ -1,0 +1,14 @@
+version: '4.25'
+services:
+  bookapi-db:
+    image: postgres:16
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: book_api
+    networks:
+      - postgres
+networks:
+  postgres:
