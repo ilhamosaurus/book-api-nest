@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Role } from '../dto/dto/enums';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -29,6 +30,17 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         firstName: true,
       },
     });
-    return user;
+
+    let userRole = Role.USER;
+
+    if (user.role === Role.ADMIN) {
+      userRole = Role.ADMIN;
+    }
+
+    return {
+      email: user.email,
+      name: user.firstName,
+      role: userRole,
+    };
   }
 }
