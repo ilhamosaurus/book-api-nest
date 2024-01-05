@@ -24,7 +24,13 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Bookself API
+
+A Restful API using Authentication and Authorization that can be implemented in vast majority of web app.
+
+## Tech Stack
+
+**Server:** Tyscript, NestJS, JWT, Prisma, Postgres
 
 ## Installation
 

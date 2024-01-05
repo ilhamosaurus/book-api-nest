@@ -1,21 +1,16 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { ACGuard, UseRoles } from 'nest-access-control';
-import { Role } from 'src/auth/dto/dto/enums';
-import { JwtGuard } from 'src/auth/jwt';
-import { Roles_Policy } from 'src/auth/roles-policy';
+import { JwtGuard } from 'src/auth/guard';
 import { UserService } from './user.service';
+import { Role } from 'src/auth/dto/dto/enums';
+import { Roles, Public } from 'src/decorator';
 
 @UseGuards(JwtGuard)
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
   @Get('dashboard')
-  @UseRoles({
-    resource: 'userBook',
-    action: 'read',
-    possession: 'own',
-  })
+  @Public()
   async userBook(@Req() req: Request) {
     console.log(req.user);
     const userEmail = (req.user as any).email;
@@ -23,11 +18,9 @@ export class UserController {
 
     return books;
   }
-  @UseRoles({
-    resource: 'allBook',
-    action: 'read',
-    possession: 'any',
-  })
+
+  @Get('all')
+  @Roles(Role.ADMIN)
   async getAll(@Req() req: Request) {
     const userRole = (req.user as any).role;
     console.log(userRole);

@@ -7,12 +7,11 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { ACGuard, AccessControlModule } from 'nest-access-control';
-import { Roles_Policy } from './auth/roles-policy';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guard';
 
 @Module({
   imports: [
-    AccessControlModule.forRoles(Roles_Policy),
     ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     BooksModule,
@@ -24,8 +23,8 @@ import { Roles_Policy } from './auth/roles-policy';
   providers: [
     AuthService,
     {
-      provide: ACGuard,
-      useFactory: () => ({ getRoles: (req) => req.user.role }),
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
