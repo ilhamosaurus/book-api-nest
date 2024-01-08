@@ -19,8 +19,6 @@ export class RolesGuard implements CanActivate {
       context.getClass(),
     ]);
 
-    console.log(requiredRoles);
-
     if (!requiredRoles || requiredRoles.length === 0) return true;
 
     const request = context.switchToHttp().getRequest<Request>();
@@ -28,7 +26,6 @@ export class RolesGuard implements CanActivate {
 
     const secret = this.config.get('JWT_SECRET');
     const decoded = this.jwtService.verify(token, { secret: secret });
-    console.log(decoded);
 
     return requiredRoles.some((role) => decoded.role.includes(role));
   }
